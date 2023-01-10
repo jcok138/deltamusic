@@ -12,16 +12,11 @@ from datetime import datetime, timedelta
 from typing import Union
 
 from pyrogram import Client
-from pyrogram.errors import (ChatAdminRequired,
-                             UserAlreadyParticipant,
-                             UserNotParticipant)
+from pyrogram.errors import ChatAdminRequired, UserAlreadyParticipant, UserNotParticipant
 from pyrogram.types import InlineKeyboardMarkup
 from pytgcalls import PyTgCalls, StreamType
-from pytgcalls.exceptions import (AlreadyJoinedError,
-                                  NoActiveGroupCall,
-                                  TelegramServerError)
-from pytgcalls.types import (JoinedGroupCallParticipant,
-                             LeftGroupCallParticipant, Update)
+from pytgcalls.exceptions import AlreadyJoinedError, NoActiveGroupCall, TelegramServerError
+from pytgcalls.types import JoinedGroupCallParticipant, LeftGroupCallParticipant, Update
 from pytgcalls.types.input_stream import AudioPiped, AudioVideoPiped
 from pytgcalls.types.stream import StreamAudioEnded
 
@@ -29,19 +24,24 @@ import config
 from strings import get_string
 from YukkiMusic import LOGGER, YouTube, app
 from YukkiMusic.misc import db
-from YukkiMusic.utils.database import (add_active_chat,
-                                       add_active_video_chat,
-                                       get_assistant,
-                                       get_audio_bitrate, get_lang,
-                                       get_loop, get_video_bitrate,
-                                       group_assistant, is_autoend,
-                                       music_on, mute_off,
-                                       remove_active_chat,
-                                       remove_active_video_chat,
-                                       set_loop)
+from YukkiMusic.utils.database import (
+    add_active_chat,
+    add_active_video_chat,
+    get_assistant,
+    get_audio_bitrate,
+    get_lang,
+    get_loop,
+    get_video_bitrate,
+    group_assistant,
+    is_autoend,
+    music_on,
+    mute_off,
+    remove_active_chat,
+    remove_active_video_chat,
+    set_loop,
+)
 from YukkiMusic.utils.exceptions import AssistantErr
-from YukkiMusic.utils.inline.play import (stream_markup,
-                                          telegram_markup)
+from YukkiMusic.utils.inline.play import stream_markup, telegram_markup
 from YukkiMusic.utils.stream.autoclear import auto_clean
 from YukkiMusic.utils.thumbnails import gen_thumb
 
@@ -59,45 +59,50 @@ async def _clear_(chat_id):
 class Call(PyTgCalls):
     def __init__(self):
         self.userbot1 = Client(
+            "Delta_1",
             api_id=config.API_ID,
             api_hash=config.API_HASH,
-            session_name=str(config.STRING1),
+            session_string=str(config.STRING1),
         )
         self.one = PyTgCalls(
             self.userbot1,
             cache_duration=100,
         )
         self.userbot2 = Client(
+            "Delta_3",
             api_id=config.API_ID,
             api_hash=config.API_HASH,
-            session_name=str(config.STRING2),
+            session_string=str(config.STRING2),
         )
         self.two = PyTgCalls(
             self.userbot2,
             cache_duration=100,
         )
         self.userbot3 = Client(
+            "Delta_3",
             api_id=config.API_ID,
             api_hash=config.API_HASH,
-            session_name=str(config.STRING3),
+            session_string=str(config.STRING3),
         )
         self.three = PyTgCalls(
             self.userbot3,
             cache_duration=100,
         )
         self.userbot4 = Client(
+            "Delta_4",
             api_id=config.API_ID,
             api_hash=config.API_HASH,
-            session_name=str(config.STRING4),
+            session_string=str(config.STRING4),
         )
         self.four = PyTgCalls(
             self.userbot4,
             cache_duration=100,
         )
         self.userbot5 = Client(
+            "Delta_5",
             api_id=config.API_ID,
             api_hash=config.API_HASH,
-            session_name=str(config.STRING5),
+            session_string=str(config.STRING5),
         )
         self.five = PyTgCalls(
             self.userbot5,
@@ -142,9 +147,7 @@ class Call(PyTgCalls):
         except:
             pass
 
-    async def skip_stream(
-        self, chat_id: int, link: str, video: Union[bool, str] = None
-    ):
+    async def skip_stream(self, chat_id: int, link: str, video: Union[bool, str] = None):
         assistant = await group_assistant(self, chat_id)
         audio_stream_quality = await get_audio_bitrate(chat_id)
         video_stream_quality = await get_video_bitrate(chat_id)
@@ -155,18 +158,14 @@ class Call(PyTgCalls):
                 video_parameters=video_stream_quality,
             )
             if video
-            else AudioPiped(
-                link, audio_parameters=audio_stream_quality
-            )
+            else AudioPiped(link, audio_parameters=audio_stream_quality)
         )
         await assistant.change_stream(
             chat_id,
             stream,
         )
 
-    async def seek_stream(
-        self, chat_id, file_path, to_seek, duration, mode
-    ):
+    async def seek_stream(self, chat_id, file_path, to_seek, duration, mode):
         assistant = await group_assistant(self, chat_id)
         audio_stream_quality = await get_audio_bitrate(chat_id)
         video_stream_quality = await get_video_bitrate(chat_id)
@@ -206,9 +205,7 @@ class Call(PyTgCalls):
             except ChatAdminRequired:
                 raise AssistantErr(_["call_1"])
             if get.status == "banned" or get.status == "kicked":
-                raise AssistantErr(
-                    _["call_2"].format(userbot.username, userbot.id)
-                )
+                raise AssistantErr(_["call_2"].format(userbot.username, userbot.id))
         except UserNotParticipant:
             chat = await app.get_chat(chat_id)
             if chat.username:
@@ -224,28 +221,16 @@ class Call(PyTgCalls):
                         try:
                             invitelink = chat.invite_link
                             if invitelink is None:
-                                invitelink = (
-                                    await app.export_chat_invite_link(
-                                        chat_id
-                                    )
-                                )
+                                invitelink = await app.export_chat_invite_link(chat_id)
                         except:
-                            invitelink = (
-                                await app.export_chat_invite_link(
-                                    chat_id
-                                )
-                            )
+                            invitelink = await app.export_chat_invite_link(chat_id)
                     except ChatAdminRequired:
                         raise AssistantErr(_["call_4"])
                     except Exception as e:
                         raise AssistantErr(e)
-                    m = await app.send_message(
-                        original_chat_id, _["call_5"]
-                    )
+                    m = await app.send_message(original_chat_id, _["call_5"])
                     if invitelink.startswith("https://t.me/+"):
-                        invitelink = invitelink.replace(
-                            "https://t.me/+", "https://t.me/joinchat/"
-                        )
+                        invitelink = invitelink.replace("https://t.me/+", "https://t.me/joinchat/")
                     await asyncio.sleep(3)
                     await userbot.join_chat(invitelink)
                     await asyncio.sleep(4)
@@ -272,9 +257,7 @@ class Call(PyTgCalls):
                 video_parameters=video_stream_quality,
             )
             if video
-            else AudioPiped(
-                link, audio_parameters=audio_stream_quality
-            )
+            else AudioPiped(link, audio_parameters=audio_stream_quality)
         )
         try:
             await assistant.join_group_call(
@@ -314,9 +297,7 @@ class Call(PyTgCalls):
             counter[chat_id] = {}
             users = len(await assistant.get_participants(chat_id))
             if users == 1:
-                autoend[chat_id] = datetime.now() + timedelta(
-                    minutes=AUTO_END_TIME
-                )
+                autoend[chat_id] = datetime.now() + timedelta(minutes=AUTO_END_TIME)
 
     async def change_stream(self, client, chat_id):
         check = db.get(chat_id)
@@ -366,9 +347,7 @@ class Call(PyTgCalls):
                         video_parameters=video_stream_quality,
                     )
                     if str(streamtype) == "video"
-                    else AudioPiped(
-                        link, audio_parameters=audio_stream_quality
-                    )
+                    else AudioPiped(link, audio_parameters=audio_stream_quality)
                 )
                 try:
                     await client.change_stream(chat_id, stream)
@@ -391,22 +370,16 @@ class Call(PyTgCalls):
                 db[chat_id][0]["mystic"] = run
                 db[chat_id][0]["markup"] = "tg"
             elif "vid_" in queued:
-                mystic = await app.send_message(
-                    original_chat_id, _["call_10"]
-                )
+                mystic = await app.send_message(original_chat_id, _["call_10"])
                 try:
                     file_path, direct = await YouTube.download(
                         videoid,
                         mystic,
                         videoid=True,
-                        video=True
-                        if str(streamtype) == "video"
-                        else False,
+                        video=True if str(streamtype) == "video" else False,
                     )
                 except:
-                    return await mystic.edit_text(
-                        _["call_9"], disable_web_page_preview=True
-                    )
+                    return await mystic.edit_text(_["call_9"], disable_web_page_preview=True)
                 stream = (
                     AudioVideoPiped(
                         file_path,
@@ -448,9 +421,7 @@ class Call(PyTgCalls):
                         video_parameters=video_stream_quality,
                     )
                     if str(streamtype) == "video"
-                    else AudioPiped(
-                        videoid, audio_parameters=audio_stream_quality
-                    )
+                    else AudioPiped(videoid, audio_parameters=audio_stream_quality)
                 )
                 try:
                     await client.change_stream(chat_id, stream)
@@ -476,9 +447,7 @@ class Call(PyTgCalls):
                         video_parameters=video_stream_quality,
                     )
                     if str(streamtype) == "video"
-                    else AudioPiped(
-                        queued, audio_parameters=audio_stream_quality
-                    )
+                    else AudioPiped(queued, audio_parameters=audio_stream_quality)
                 )
                 try:
                     await client.change_stream(chat_id, stream)
@@ -494,9 +463,7 @@ class Call(PyTgCalls):
                         photo=config.TELEGRAM_AUDIO_URL
                         if str(streamtype) == "audio"
                         else config.TELEGRAM_VIDEO_URL,
-                        caption=_["stream_3"].format(
-                            title, check[0]["dur"], user
-                        ),
+                        caption=_["stream_3"].format(title, check[0]["dur"], user),
                         reply_markup=InlineKeyboardMarkup(button),
                     )
                     db[chat_id][0]["mystic"] = run
@@ -506,9 +473,7 @@ class Call(PyTgCalls):
                     run = await app.send_photo(
                         original_chat_id,
                         photo=config.SOUNCLOUD_IMG_URL,
-                        caption=_["stream_3"].format(
-                            title, check[0]["dur"], user
-                        ),
+                        caption=_["stream_3"].format(title, check[0]["dur"], user),
                         reply_markup=InlineKeyboardMarkup(button),
                     )
                     db[chat_id][0]["mystic"] = run
@@ -590,9 +555,9 @@ class Call(PyTgCalls):
         @self.four.on_participants_change()
         @self.five.on_participants_change()
         async def participants_change_handler(client, update: Update):
-            if not isinstance(
-                update, JoinedGroupCallParticipant
-            ) and not isinstance(update, LeftGroupCallParticipant):
+            if not isinstance(update, JoinedGroupCallParticipant) and not isinstance(
+                update, LeftGroupCallParticipant
+            ):
                 return
             chat_id = update.chat_id
             users = counter.get(chat_id)
@@ -603,22 +568,14 @@ class Call(PyTgCalls):
                     return
                 counter[chat_id] = got
                 if got == 1:
-                    autoend[chat_id] = datetime.now() + timedelta(
-                        minutes=AUTO_END_TIME
-                    )
+                    autoend[chat_id] = datetime.now() + timedelta(minutes=AUTO_END_TIME)
                     return
                 autoend[chat_id] = {}
             else:
-                final = (
-                    users + 1
-                    if isinstance(update, JoinedGroupCallParticipant)
-                    else users - 1
-                )
+                final = users + 1 if isinstance(update, JoinedGroupCallParticipant) else users - 1
                 counter[chat_id] = final
                 if final == 1:
-                    autoend[chat_id] = datetime.now() + timedelta(
-                        minutes=AUTO_END_TIME
-                    )
+                    autoend[chat_id] = datetime.now() + timedelta(minutes=AUTO_END_TIME)
                     return
                 autoend[chat_id] = {}
 

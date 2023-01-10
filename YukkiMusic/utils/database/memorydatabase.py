@@ -133,9 +133,7 @@ async def get_cmode(chat_id: int) -> int:
 
 async def set_cmode(chat_id: int, mode: int):
     channelconnect[chat_id] = mode
-    await channeldb.update_one(
-        {"chat_id": chat_id}, {"$set": {"mode": mode}}, upsert=True
-    )
+    await channeldb.update_one({"chat_id": chat_id}, {"$set": {"mode": mode}}, upsert=True)
 
 
 # PLAY TYPE WHETHER ADMINS ONLY OR EVERYONE
@@ -153,9 +151,7 @@ async def get_playtype(chat_id: int) -> str:
 
 async def set_playtype(chat_id: int, mode: str):
     playtype[chat_id] = mode
-    await playtypedb.update_one(
-        {"chat_id": chat_id}, {"$set": {"mode": mode}}, upsert=True
-    )
+    await playtypedb.update_one({"chat_id": chat_id}, {"$set": {"mode": mode}}, upsert=True)
 
 
 # play mode whether inline or direct query
@@ -173,9 +169,7 @@ async def get_playmode(chat_id: int) -> str:
 
 async def set_playmode(chat_id: int, mode: str):
     playmode[chat_id] = mode
-    await playmodedb.update_one(
-        {"chat_id": chat_id}, {"$set": {"mode": mode}}, upsert=True
-    )
+    await playmodedb.update_one({"chat_id": chat_id}, {"$set": {"mode": mode}}, upsert=True)
 
 
 # language
@@ -193,9 +187,7 @@ async def get_lang(chat_id: int) -> str:
 
 async def set_lang(chat_id: int, lang: str):
     langm[chat_id] = lang
-    await langdb.update_one(
-        {"chat_id": chat_id}, {"$set": {"lang": lang}}, upsert=True
-    )
+    await langdb.update_one({"chat_id": chat_id}, {"$set": {"lang": lang}}, upsert=True)
 
 
 # Muted
@@ -391,9 +383,7 @@ async def set_video_limit(limt: int):
     chat_id = 123456
     vlimit.clear()
     vlimit.append(limt)
-    return await videodb.update_one(
-        {"chat_id": chat_id}, {"$set": {"limit": limt}}, upsert=True
-    )
+    return await videodb.update_one({"chat_id": chat_id}, {"$set": {"limit": limt}}, upsert=True)
 
 
 # On Off
@@ -459,12 +449,14 @@ async def maintenance_on():
 
 # Audio Video Limit
 
-from pytgcalls.types.input_stream.quality import (HighQualityAudio,
-                                                  HighQualityVideo,
-                                                  LowQualityAudio,
-                                                  LowQualityVideo,
-                                                  MediumQualityAudio,
-                                                  MediumQualityVideo)
+from pytgcalls.types.input_stream.quality import (
+    HighQualityAudio,
+    HighQualityVideo,
+    LowQualityAudio,
+    LowQualityVideo,
+    MediumQualityAudio,
+    MediumQualityVideo,
+)
 
 
 async def save_audio_bitrate(chat_id: int, bitrate: str):

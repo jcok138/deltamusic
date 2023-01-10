@@ -32,14 +32,9 @@ async def init():
         and not config.STRING4
         and not config.STRING5
     ):
-        LOGGER("YukkiMusic").error(
-            "No Assistant Clients Vars Defined!.. Exiting Process."
-        )
+        LOGGER("YukkiMusic").error("No Assistant Clients Vars Defined!.. Exiting Process.")
         return
-    if (
-        not config.SPOTIFY_CLIENT_ID
-        and not config.SPOTIFY_CLIENT_SECRET
-    ):
+    if not config.SPOTIFY_CLIENT_ID and not config.SPOTIFY_CLIENT_SECRET:
         LOGGER("YukkiMusic").warning(
             "No Spotify Vars defined. Your bot won't be able to play spotify queries."
         )
@@ -55,15 +50,11 @@ async def init():
     await app.start()
     for all_module in ALL_MODULES:
         importlib.import_module("YukkiMusic.plugins" + all_module)
-    LOGGER("Yukkimusic.plugins").info(
-        "Successfully Imported Modules "
-    )
+    LOGGER("Yukkimusic.plugins").info("Successfully Imported Modules ")
     await userbot.start()
     await Yukki.start()
     try:
-        await Yukki.stream_call(
-            "http://docs.evostream.com/sample_content/assets/sintel1m720p.mp4"
-        )
+        await Yukki.stream_call("http://docs.evostream.com/sample_content/assets/sintel1m720p.mp4")
     except NoActiveGroupCall:
         LOGGER("YukkiMusic").error(
             "[ERROR] - \n\nPlease turn on your Logger Group's Voice Call. Make sure you never close/end voice call in your log group"

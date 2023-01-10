@@ -9,7 +9,7 @@
 
 import sys
 
-from pyrogram import Client
+from pyrogram import Client, enums
 from pyrogram.types import BotCommand
 
 import config
@@ -33,9 +33,7 @@ class YukkiBot(Client):
         self.username = get_me.username
         self.id = get_me.id
         try:
-            await self.send_message(
-                config.LOG_GROUP_ID, "Bot Started"
-            )
+            await self.send_message(config.LOG_GROUP_ID, "Bot Started.!")
         except:
             LOGGER(__name__).error(
                 "Bot has failed to access the log Group. Make sure that you have added your bot to your log channel and promoted as admin!"
@@ -53,18 +51,16 @@ class YukkiBot(Client):
                         BotCommand("end", "Berhenti memutar,dan tinggalkan voice chat!"),
                         BotCommand("shuffle", "Melakukan pemutaran secara acak"),
                         BotCommand("playmode", "Mengganti mode pemutaran default."),
-                        BotCommand("settings", "Pengaturan pemutaran musik di chat saat ini!")
-                        ]
-                    )
+                        BotCommand("settings", "Pengaturan pemutaran musik di chat saat ini!"),
+                    ]
+                )
             except:
                 pass
         else:
             pass
         a = await self.get_chat_member(config.LOG_GROUP_ID, self.id)
-        if a.status != "administrator":
-            LOGGER(__name__).error(
-                "Bot bukan admin, jadikan bot sebagai admin lalu ulangi!"
-            )
+        if a.status != enums.ChatMemberStatus.ADMINISTRATOR:
+            LOGGER(__name__).error("Bot bukan admin, jadikan bot sebagai admin lalu ulangi!")
             sys.exit()
         if get_me.last_name:
             self.name = get_me.first_name + " " + get_me.last_name

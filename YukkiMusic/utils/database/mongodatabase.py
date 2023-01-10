@@ -55,9 +55,7 @@ async def save_playlist(chat_id: int, name: str, note: dict):
     name = name
     _notes = await _get_playlists(chat_id)
     _notes[name] = note
-    await playlistdb.update_one(
-        {"chat_id": chat_id}, {"$set": {"notes": _notes}}, upsert=True
-    )
+    await playlistdb.update_one({"chat_id": chat_id}, {"$set": {"notes": _notes}}, upsert=True)
 
 
 async def delete_playlist(chat_id: int, name: str) -> bool:
@@ -208,9 +206,7 @@ async def save_authuser(chat_id: int, name: str, note: dict):
     _notes = await _get_authusers(chat_id)
     _notes[name] = note
 
-    await authuserdb.update_one(
-        {"chat_id": chat_id}, {"$set": {"notes": _notes}}, upsert=True
-    )
+    await authuserdb.update_one({"chat_id": chat_id}, {"$set": {"notes": _notes}}, upsert=True)
 
 
 async def delete_authuser(chat_id: int, name: str) -> bool:
@@ -272,18 +268,14 @@ async def get_sudoers() -> list:
 async def add_sudo(user_id: int) -> bool:
     sudoers = await get_sudoers()
     sudoers.append(user_id)
-    await sudoersdb.update_one(
-        {"sudo": "sudo"}, {"$set": {"sudoers": sudoers}}, upsert=True
-    )
+    await sudoersdb.update_one({"sudo": "sudo"}, {"$set": {"sudoers": sudoers}}, upsert=True)
     return True
 
 
 async def remove_sudo(user_id: int) -> bool:
     sudoers = await get_sudoers()
     sudoers.remove(user_id)
-    await sudoersdb.update_one(
-        {"sudo": "sudo"}, {"$set": {"sudoers": sudoers}}, upsert=True
-    )
+    await sudoersdb.update_one({"sudo": "sudo"}, {"$set": {"sudoers": sudoers}}, upsert=True)
     return True
 
 
@@ -303,9 +295,7 @@ async def set_queries(mode: int):
     queries = await queriesdb.find_one({"chat_id": chat_id})
     if queries:
         mode = queries["mode"] + mode
-    return await queriesdb.update_one(
-        {"chat_id": chat_id}, {"$set": {"mode": mode}}, upsert=True
-    )
+    return await queriesdb.update_one({"chat_id": chat_id}, {"$set": {"mode": mode}}, upsert=True)
 
 
 # Top Chats DB
@@ -349,9 +339,7 @@ async def get_particulars(chat_id: int) -> Dict[str, int]:
     return ids["vidid"]
 
 
-async def get_particular_top(
-    chat_id: int, name: str
-) -> Union[bool, dict]:
+async def get_particular_top(chat_id: int, name: str) -> Union[bool, dict]:
     ids = await get_particulars(chat_id)
     if name in ids:
         return ids[name]
@@ -360,9 +348,7 @@ async def get_particular_top(
 async def update_particular_top(chat_id: int, name: str, vidid: dict):
     ids = await get_particulars(chat_id)
     ids[name] = vidid
-    await chattopdb.update_one(
-        {"chat_id": chat_id}, {"$set": {"vidid": ids}}, upsert=True
-    )
+    await chattopdb.update_one({"chat_id": chat_id}, {"$set": {"vidid": ids}}, upsert=True)
 
 
 # Top User DB
@@ -384,9 +370,7 @@ async def get_user_top(chat_id: int, name: str) -> Union[bool, dict]:
 async def update_user_top(chat_id: int, name: str, vidid: dict):
     ids = await get_userss(chat_id)
     ids[name] = vidid
-    await userdb.update_one(
-        {"chat_id": chat_id}, {"$set": {"vidid": ids}}, upsert=True
-    )
+    await userdb.update_one({"chat_id": chat_id}, {"$set": {"vidid": ids}}, upsert=True)
 
 
 async def get_topp_users() -> dict:
