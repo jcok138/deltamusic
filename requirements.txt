@@ -3,6 +3,7 @@ aiohttp
 asyncio
 dnspython
 ffmpeg-python
+git+https://github.com/Mayuri-Chan/pyrofork.git
 gitpython
 hachoir
 heroku3
@@ -12,7 +13,6 @@ pillow
 psutil
 py-tgcalls
 pykeyboard
-pyrogram
 python-dotenv
 pyyaml==5.3.1
 requests
