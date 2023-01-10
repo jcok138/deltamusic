@@ -51,12 +51,14 @@ async def markup_panel(client, CallbackQuery: CallbackQuery, _):
     chat_id = CallbackQuery.message.chat.id
     buttons = panel_markup_1(_, videoid, chat_id)
     try:
-        await CallbackQuery.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
+        await CallbackQuery.edit_message_reply_markup(
+            reply_markup=InlineKeyboardMarkup(buttons)
+        )
     except:
         return
     if chat_id not in wrong:
         wrong[chat_id] = {}
-    wrong[chat_id][CallbackQuery.message.message_id] = False
+    wrong[chat_id][CallbackQuery.message.id] = False
 
 
 @app.on_callback_query(filters.regex("MainMarkup") & ~BANNED_USERS)
@@ -72,12 +74,14 @@ async def del_back_playlist(client, CallbackQuery, _):
         buttons = stream_markup(_, videoid, chat_id)
     chat_id = CallbackQuery.message.chat.id
     try:
-        await CallbackQuery.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
+        await CallbackQuery.edit_message_reply_markup(
+            reply_markup=InlineKeyboardMarkup(buttons)
+        )
     except:
         return
     if chat_id not in wrong:
         wrong[chat_id] = {}
-    wrong[chat_id][CallbackQuery.message.message_id] = True
+    wrong[chat_id][CallbackQuery.message.id] = True
 
 
 @app.on_callback_query(filters.regex("Pages") & ~BANNED_USERS)
@@ -104,7 +108,9 @@ async def del_back_playlist(client, CallbackQuery, _):
         if pages == 0:
             buttons = panel_markup_3(_, videoid, chat_id)
     try:
-        await CallbackQuery.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
+        await CallbackQuery.edit_message_reply_markup(
+            reply_markup=InlineKeyboardMarkup(buttons)
+        )
     except:
         return
 
@@ -219,7 +225,9 @@ async def del_back_playlist(client, CallbackQuery, _):
         if "live_" in queued:
             n, link = await YouTube.video(videoid, True)
             if n == 0:
-                return await CallbackQuery.message.reply_text(_["admin_11"].format(title))
+                return await CallbackQuery.message.reply_text(
+                    _["admin_11"].format(title)
+                )
             try:
                 await Yukki.skip_stream(chat_id, link, video=status)
             except Exception:
@@ -290,7 +298,9 @@ async def del_back_playlist(client, CallbackQuery, _):
             if videoid == "telegram":
                 button = telegram_markup(_, chat_id)
                 run = await CallbackQuery.message.reply_photo(
-                    photo=TELEGRAM_AUDIO_URL if str(streamtype) == "audio" else TELEGRAM_VIDEO_URL,
+                    photo=TELEGRAM_AUDIO_URL
+                    if str(streamtype) == "audio"
+                    else TELEGRAM_VIDEO_URL,
                     caption=_["stream_3"].format(title, check[0]["dur"], user),
                     reply_markup=InlineKeyboardMarkup(button),
                 )
@@ -299,7 +309,9 @@ async def del_back_playlist(client, CallbackQuery, _):
             elif videoid == "soundcloud":
                 button = telegram_markup(_, chat_id)
                 run = await CallbackQuery.message.reply_photo(
-                    photo=SOUNCLOUD_IMG_URL if str(streamtype) == "audio" else TELEGRAM_VIDEO_URL,
+                    photo=SOUNCLOUD_IMG_URL
+                    if str(streamtype) == "audio"
+                    else TELEGRAM_VIDEO_URL,
                     caption=_["stream_3"].format(title, check[0]["dur"], user),
                     reply_markup=InlineKeyboardMarkup(button),
                 )
