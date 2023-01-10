@@ -112,7 +112,9 @@ def AdminActual(mystic):
             return await message.reply_text(_["general_4"], reply_markup=upl)
         if message.from_user.id not in SUDOERS:
             try:
-                member = await app.get_chat_member(message.chat.id, message.from_user.id)
+                member = await app.get_chat_member(
+                    message.chat.id, message.from_user.id
+                )
             except:
                 return
             if not member.can_manage_voice_chats:
@@ -146,7 +148,7 @@ def ActualAdminCB(mystic):
                 )
             except:
                 return await CallbackQuery.answer(_["general_5"], show_alert=True)
-            if not a.can_manage_voice_chats:
+            if not a.can_manage_video_chats:
                 if CallbackQuery.from_user.id not in SUDOERS:
                     token = await int_to_alpha(CallbackQuery.from_user.id)
                     _check = await get_authuser_names(CallbackQuery.from_user.id)

@@ -28,7 +28,10 @@ from YukkiMusic.misc import SUDOERS
 
 
 async def aexec(code, client, message):
-    exec("async def __aexec(client, message): " + "".join(f"\n {a}" for a in code.split("\n")))
+    exec(
+        "async def __aexec(client, message): "
+        + "".join(f"\n {a}" for a in code.split("\n"))
+    )
     return await locals()["__aexec"](client, message)
 
 
@@ -38,10 +41,14 @@ async def edit_or_reply(msg: Message, **kwargs):
     await func(**{k: v for k, v in kwargs.items() if k in spec})
 
 
-@app.on_message(filters.command("eval") & SUDOERS & ~filters.forwarded & ~filters.via_bot)
+@app.on_message(
+    filters.command("eval") & SUDOERS & ~filters.forwarded & ~filters.via_bot
+)
 async def executor(client, message):
     if len(message.command) < 2:
-        return await edit_or_reply(message, text="__Nigga Give me some command to execute.__")
+        return await edit_or_reply(
+            message, text="__Nigga Give me some command to execute.__"
+        )
     try:
         cmd = message.text.split(" ", maxsplit=1)[1]
     except IndexError:
@@ -125,7 +132,9 @@ async def forceclose_command(_, CallbackQuery):
     query, user_id = callback_request.split("|")
     if CallbackQuery.from_user.id != int(user_id):
         try:
-            return await CallbackQuery.answer("You're not allowed to close this.", show_alert=True)
+            return await CallbackQuery.answer(
+                "You're not allowed to close this.", show_alert=True
+            )
         except:
             return
     await CallbackQuery.message.delete()
@@ -175,7 +184,9 @@ async def shellrunner(client, message):
                 value=exc_obj,
                 tb=exc_tb,
             )
-            return await edit_or_reply(message, text=f"**ERROR:**\n```{''.join(errors)}```")
+            return await edit_or_reply(
+                message, text=f"**ERROR:**\n```{''.join(errors)}```"
+            )
         output = process.stdout.read()[:-1].decode("utf-8")
     if str(output) == "\n":
         output = None
@@ -186,7 +197,7 @@ async def shellrunner(client, message):
             await client.send_document(
                 message.chat.id,
                 "output.txt",
-                reply_to_message_id=message.message_id,
+                reply_to_message_id=message.id,
                 caption="`Output`",
             )
             return os.remove("output.txt")
