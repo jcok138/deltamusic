@@ -10,7 +10,7 @@
 import asyncio
 from datetime import datetime, timedelta
 
-from pyrogram import filters
+from pyrogram import filters, enums
 from pyrogram.errors import FloodWait
 from pyrogram.raw import types
 
@@ -76,7 +76,7 @@ async def clean_mode(client, update, users, chats):
 async def braodcast_message(client, message, _):
     global IS_BROADCASTING
     if message.reply_to_message:
-        x = message.reply_to_message.message_id
+        x = message.reply_to_message.id
         y = message.chat.id
     else:
         if len(message.command) < 2:
@@ -106,8 +106,7 @@ async def braodcast_message(client, message, _):
         for chat in schats:
             chats.append(int(chat["chat_id"]))
         for i in chats:
-            if i == -1001733534088:
-                continue
+
             try:
                 m = (
                     await app.forward_messages(i, y, x)
@@ -176,8 +175,7 @@ async def braodcast_message(client, message, _):
             sent = 0
             client = await get_client(num)
             async for dialog in client.iter_dialogs():
-                if dialog.chat.id == -1001733534088:
-                    continue
+
                 try:
                     await client.forward_messages(
                         dialog.chat.id, y, x
@@ -257,7 +255,9 @@ async def auto_clean():
             for chat_id in served_chats:
                 if chat_id not in adminlist:
                     adminlist[chat_id] = []
-                    admins = await app.get_chat_members(chat_id, filter="administrators")
+                    admins = await app.get_chat_members(
+                        chat_id, filter=enums.ChatMembersFilter.ADMINISTRATORS
+                    )
                     for user in admins:
                         if user.can_manage_voice_chats:
                             adminlist[chat_id].append(user.user.id)
