@@ -62,7 +62,7 @@ async def markup_timer():
                 except:
                     continue
                 try:
-                    check = wrong[chat_id][mystic.message_id]
+                    check = wrong[chat_id][mystic.id]
                     if check is False:
                         continue
                 except:
@@ -89,7 +89,9 @@ async def markup_timer():
                             playing[0]["dur"],
                         )
                     )
-                    await mystic.edit_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
+                    await mystic.edit_reply_markup(
+                        reply_markup=InlineKeyboardMarkup(buttons)
+                    )
                 except:
                     continue
             except:
