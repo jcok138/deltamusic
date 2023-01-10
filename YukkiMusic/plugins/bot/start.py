@@ -9,7 +9,7 @@
 
 import asyncio
 
-from pyrogram import filters
+from pyrogram import filters, enums
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from youtubesearchpython.__future__ import VideosSearch
 
@@ -37,7 +37,9 @@ from YukkiMusic.utils.inline import help_pannel, private_panel, start_pannel
 loop = asyncio.get_running_loop()
 
 
-@app.on_message(filters.command(get_command("START_COMMAND")) & filters.private & ~BANNED_USERS)
+@app.on_message(
+    filters.command(get_command("START_COMMAND")) & filters.private & ~BANNED_USERS
+)
 @LanguageStart
 async def start_comm(client, message: Message, _):
     await add_served_user(message.from_user.id)
@@ -202,7 +204,9 @@ async def start_comm(client, message: Message, _):
             )
 
 
-@app.on_message(filters.command(get_command("START_COMMAND")) & filters.group & ~BANNED_USERS)
+@app.on_message(
+    filters.command(get_command("START_COMMAND")) & filters.group & ~BANNED_USERS
+)
 @LanguageStart
 async def testbot(client, message: Message, _):
     out = start_pannel(_)
@@ -232,12 +236,14 @@ async def welcome(client, message: Message):
             _ = get_string(language)
             if member.id == app.id:
                 chat_type = message.chat.type
-                if chat_type != "supergroup":
+                if chat_type != enums.ChatType.SUPERGROUP:
                     await message.reply_text(_["start_6"])
                     return await app.leave_chat(message.chat.id)
                 if chat_id in await blacklisted_chats():
                     await message.reply_text(
-                        _["start_7"].format(f"https://t.me/{app.username}?start=sudolist")
+                        _["start_7"].format(
+                            f"https://t.me/{app.username}?start=sudolist"
+                        )
                     )
                     return await app.leave_chat(chat_id)
                 userbot = await get_assistant(message.chat.id)
