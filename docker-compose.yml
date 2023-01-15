@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  deltamusic:
+      build:
+        context: .
+      restart: on-failure
+      env_file:
+        - .env
